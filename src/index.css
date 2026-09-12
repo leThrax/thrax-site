@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0d0f12;
+  --color-surface: #15181d;
+  --color-surface-hover: #1b1f26;
+  --color-border: #2a2f3a;
+  --color-fg: #d8dee9;
+  --color-muted: #6b7280;
+  --color-accent: #7ee787;
+  --color-accent-2: #d992ff;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  background-attachment: fixed;
+  /* CRT-style scanlines + edge vignette — shows in the page's negative space
+     around the terminal-panel cards, which paint their own backgrounds on
+     top. Both layers are static (no @keyframes), so no reduced-motion
+     concerns. */
+  background-image:
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.035) 0px,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
+/* Custom accent-colored scrollbar. `scrollbar-*` covers Firefox; the
+   `::-webkit-scrollbar*` pseudo-elements cover Chromium/Safari. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) var(--color-bg);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent);
+  border-radius: 6px;
+  border: 2px solid var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent-2);
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Only blinks while the containing .group is hovered/focused — scoped here
+   (rather than an unconditional animation on .cursor-blink) so it doesn't
+   override the opacity-0/opacity-100 show/hide utilities at rest. */
+.group:hover .cursor-blink,
+.group:focus-visible .cursor-blink {
+  animation: cursor-blink 1s steps(1) infinite;
+}
+
+/* Always-on variant, for a standalone terminal-prompt cursor (not gated
+   behind a hover/focus state) — e.g. the FetchHeader's Shell: line. */
+.terminal-cursor {
+  animation: cursor-blink 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .cursor-blink,
+  .group:focus-visible .cursor-blink,
+  .terminal-cursor {
+    animation: none;
+  }
+}
