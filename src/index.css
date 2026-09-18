@@ -91,3 +91,38 @@ body {
     animation: none;
   }
 }
+
+/* rehype-highlight token colors for blog-post code blocks — a small hand-
+   rolled theme (not a canned highlight.js stylesheet) so code blocks use
+   only this site's existing accent/muted palette, same reasoning as
+   skipping @tailwindcss/typography for prose styling. */
+.hljs-comment,
+.hljs-quote {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-literal,
+.hljs-selector-tag {
+  color: var(--color-accent-2);
+}
+
+.hljs-string,
+.hljs-attr,
+.hljs-attribute,
+.hljs-built_in,
+.hljs-type {
+  color: var(--color-accent);
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_ {
+  color: var(--color-fg);
+  font-weight: 500;
+}
+
+.hljs-number {
+  color: var(--color-fg);
+}

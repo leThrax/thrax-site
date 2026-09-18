@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -40,6 +40,26 @@ export function DeviceScene({ modelUrl }: DeviceSceneProps) {
   // manual matchMedia pattern BootSequence uses, rather than relying on
   // MotionConfig (this canvas sits outside Framer Motion's control).
   const autoRotate = useMemo(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
+
+  // .glb uploads can be tens of MB, so the model isn't fetched until the
+  // visitor opts in — <Canvas>/useGLTF only mount once `loaded` flips true,
+  // which is also when the actual network request for modelUrl starts.
+  const [loaded, setLoaded] = useState(false)
+
+  if (!loaded) {
+    return (
+      <div className="flex h-full min-h-128 w-full flex-col items-center justify-center gap-3 rounded-md border border-border bg-bg">
+        <p className="font-mono text-sm text-muted">3D model not loaded — files can be large.</p>
+        <button
+          type="button"
+          onClick={() => setLoaded(true)}
+          className="rounded border border-accent bg-accent/10 px-3 py-1 font-mono text-sm font-medium text-accent"
+        >
+          Load 3D model
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="h-full min-h-128 w-full overflow-hidden rounded-md border border-border bg-bg">

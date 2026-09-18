@@ -2,7 +2,7 @@ import { useTypewriter } from '../hooks/useTypewriter'
 
 // Same bordered "terminal window" treatment as FetchHeader, but showing
 // site/owner info instead of filter state — kept separate since FetchHeader
-// stays specific to the tech-stack page's filter flags.
+// stays specific to the software-stack page's filter flags.
 export function WhoamiHeader() {
   const displayedShell = useTypewriter('whoami')
 
@@ -23,7 +23,7 @@ export function WhoamiHeader() {
           <span className="text-muted">Role:</span> bachelor informatics student
         </p>
         <p>
-          <span className="text-muted">Site:</span> tech stack, CV, projects, blog
+          <span className="text-muted">Site:</span> software stack, CV, projects, blog
         </p>
         <p>
           <span className="text-muted">Shell:</span> {displayedShell}

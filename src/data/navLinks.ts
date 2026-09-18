@@ -9,9 +9,9 @@ export interface NavLink {
 // HomePage (the quick-link cards) so both stay in sync automatically.
 export const NAV_LINKS: NavLink[] = [
   {
-    path: '/stack',
-    label: 'Tech Stack',
-    flag: 'stack',
+    path: '/software',
+    label: 'Software Stack',
+    flag: 'software',
     description: 'Tools, apps, and CLI utilities I actually use — filterable by OS and topic.',
   },
   {

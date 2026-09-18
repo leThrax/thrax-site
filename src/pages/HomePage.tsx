@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom'
 import { WhoamiHeader } from '../components/WhoamiHeader'
 import { NAV_LINKS } from '../data/navLinks'
 import { sectionVariants } from '../lib/motionVariants'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 export function HomePage() {
+  useDocumentTitle('thrax-site')
+
   return (
     <>
       <motion.div variants={sectionVariants}>
@@ -12,8 +15,8 @@ export function HomePage() {
       </motion.div>
 
       <motion.div variants={sectionVariants} className="font-mono text-sm text-muted">
-        <span className="text-accent">❯</span> Personal site — tech stack, CV, projects, and a blog, all in one
-        place.
+        <span className="text-accent">❯</span> Personal site — software stack, CV, projects, and a blog, all in
+        one place.
       </motion.div>
 
       <motion.div

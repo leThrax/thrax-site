@@ -33,7 +33,7 @@ export function FetchHeader({ itemCount, groups, selected }: FetchHeaderProps) {
         <p className="text-accent">visitor@thrax-site</p>
         <p className="text-muted">-------------------</p>
         <p>
-          <span className="text-muted">OS:</span> Personal Tech Stack
+          <span className="text-muted">OS:</span> Personal Software Stack
         </p>
         <p>
           <span className="text-muted">Tools:</span> {itemCount} tracked

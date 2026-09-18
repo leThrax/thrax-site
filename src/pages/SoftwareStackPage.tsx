@@ -20,8 +20,10 @@ import { ItemGrid } from '../components/ItemGrid'
 import { CategorySection } from '../components/CategorySection'
 import { ItemDetail } from '../components/ItemDetail'
 import { sectionVariants } from '../lib/motionVariants'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
-export function TechStackPage() {
+export function SoftwareStackPage() {
+  useDocumentTitle('thrax-site — Software Stack')
   const [selected, setSelected] = useUrlSyncedFilters()
   const [searchQuery, setSearchQuery] = useState('')
   const { items, loading: itemsLoading, error: itemsError } = useItems()

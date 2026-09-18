@@ -2,8 +2,10 @@ import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import { usePosts } from '../hooks/usePosts'
 import { sectionVariants } from '../lib/motionVariants'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 export function BlogIndexPage() {
+  useDocumentTitle('thrax-site — Blog')
   const { posts, loading, error } = usePosts()
   const publishedPosts = posts.filter((post) => post.publishedAt)
 

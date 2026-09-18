@@ -3,8 +3,10 @@ import { motion } from 'motion/react'
 import { useDevices } from '../hooks/useDevices'
 import { DeviceScene } from '../components/hardware/DeviceScene'
 import { sectionVariants } from '../lib/motionVariants'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 export function HardwarePage() {
+  useDocumentTitle('thrax-site — Hardware')
   const { devices, loading, error } = useDevices()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const selectedDevice = devices.find((d) => d.id === selectedId) ?? devices[0]

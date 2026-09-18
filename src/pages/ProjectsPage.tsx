@@ -5,11 +5,13 @@ import { usePinnedRepos } from '../hooks/usePinnedRepos'
 import { fetchGithubRepo } from '../lib/github'
 import { ProjectCard } from '../components/ProjectCard'
 import { sectionVariants } from '../lib/motionVariants'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import type { GithubRepo } from '../types/github'
 
 const GITHUB_USERNAME = import.meta.env.VITE_GITHUB_USERNAME ?? ''
 
 export function ProjectsPage() {
+  useDocumentTitle('thrax-site — Projects')
   const { repos: ownedRepos, loading: ownedLoading, error: ownedError } = useGithubRepos(GITHUB_USERNAME)
   const { pinnedRepoIds, loading: pinnedIdsLoading } = usePinnedRepos()
   const [pinnedRepos, setPinnedRepos] = useState<GithubRepo[]>([])

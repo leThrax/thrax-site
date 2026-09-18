@@ -307,3 +307,45 @@ drop policy if exists "Admin can upload device-models" on storage.objects;
 create policy "Admin can upload device-models"
   on storage.objects for insert
   with check (bucket_id = 'device-models' and auth.uid() = '<ADMIN_USER_ID>');
+
+-- CV timeline entries (jobs/education), rendered as a vertical path on the
+-- /cv page. Unlike every other table in this schema, display order is not
+-- derived from created_at or chronology — it's an admin-controlled manual
+-- ordering set via drag-and-drop in /admin, persisted in "position" and
+-- read back with `.order('position')`. end_date is nullable: null means
+-- "ongoing" (renders as "Present" on the public page). description is a
+-- free-form optional blurb — multiple lines render as a bullet list, a
+-- single line as a plain paragraph.
+
+create table if not exists timeline_entries (
+  id text primary key,
+  role text not null,
+  org text not null,
+  start_date date not null,
+  end_date date,
+  description text,
+  position integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table timeline_entries enable row level security;
+
+drop policy if exists "Public can read timeline entries" on timeline_entries;
+create policy "Public can read timeline entries"
+  on timeline_entries for select
+  using (true);
+
+drop policy if exists "Admin can insert timeline entries" on timeline_entries;
+create policy "Admin can insert timeline entries"
+  on timeline_entries for insert
+  with check (auth.uid() = '<ADMIN_USER_ID>');
+
+drop policy if exists "Admin can update timeline entries" on timeline_entries;
+create policy "Admin can update timeline entries"
+  on timeline_entries for update
+  using (auth.uid() = '<ADMIN_USER_ID>');
+
+drop policy if exists "Admin can delete timeline entries" on timeline_entries;
+create policy "Admin can delete timeline entries"
+  on timeline_entries for delete
+  using (auth.uid() = '<ADMIN_USER_ID>');

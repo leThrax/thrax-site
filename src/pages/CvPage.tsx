@@ -1,6 +1,8 @@
 import { motion } from 'motion/react'
 import { cv } from '../data/cv'
 import { sectionVariants } from '../lib/motionVariants'
+import { TimelinePath } from '../components/TimelinePath'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 function SectionHeading({ label }: { label: string }) {
   return (
@@ -11,6 +13,8 @@ function SectionHeading({ label }: { label: string }) {
 }
 
 export function CvPage() {
+  useDocumentTitle('thrax-site — CV')
+
   return (
     <>
       <motion.div variants={sectionVariants} className="flex flex-col gap-1">
@@ -26,42 +30,7 @@ export function CvPage() {
         </div>
       </motion.div>
 
-      <motion.div variants={sectionVariants} className="flex flex-col gap-3">
-        <SectionHeading label="Experience" />
-        <div className="flex flex-col gap-3">
-          {cv.experience.map((entry) => (
-            <div key={`${entry.org}-${entry.role}`} className="rounded-md border border-border bg-surface p-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <p className="font-mono text-sm font-medium text-fg">
-                  {entry.role} <span className="text-muted">@ {entry.org}</span>
-                </p>
-                <p className="font-mono text-xs text-muted">{entry.period}</p>
-              </div>
-              <ul className="mt-2 list-disc pl-5 text-sm text-muted">
-                {entry.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
-      <motion.div variants={sectionVariants} className="flex flex-col gap-3">
-        <SectionHeading label="Education" />
-        <div className="flex flex-col gap-3">
-          {cv.education.map((entry) => (
-            <div key={`${entry.org}-${entry.degree}`} className="rounded-md border border-border bg-surface p-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <p className="font-mono text-sm font-medium text-fg">
-                  {entry.degree} <span className="text-muted">@ {entry.org}</span>
-                </p>
-                <p className="font-mono text-xs text-muted">{entry.period}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </motion.div>
+      <TimelinePath />
 
       <motion.div variants={sectionVariants} className="flex flex-col gap-3">
         <SectionHeading label="Skills" />

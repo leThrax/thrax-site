@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { useSession } from '../hooks/useSession'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useItems } from '../hooks/useItems'
 import { useTags } from '../hooks/useTags'
 import { useCategories } from '../hooks/useCategories'
 import { usePosts } from '../hooks/usePosts'
 import { usePinnedRepos } from '../hooks/usePinnedRepos'
 import { useDevices } from '../hooks/useDevices'
+import { useTimelineEntries } from '../hooks/useTimelineEntries'
 import { createItem, deleteItem, updateItem } from '../lib/items'
 import { createTag, deleteTag } from '../lib/tags'
 import { createCategory, deleteCategory } from '../lib/categories'
 import { createPost, deletePost, updatePost } from '../lib/posts'
 import { createPinnedRepo, deletePinnedRepo } from '../lib/pinnedRepos'
 import { createDevice, deleteDevice, updateDevice } from '../lib/devices'
+import { createTimelineEntry, deleteTimelineEntry, reorderTimelineEntries, updateTimelineEntry } from '../lib/timeline'
 import { supabase } from '../lib/supabaseClient'
 import { filterGroups } from '../data/filterTags'
 import { slugify } from '../lib/slugify'
@@ -20,6 +23,7 @@ import type { FilterTag } from '../types/filter'
 import type { Category } from '../types/category'
 import type { Post } from '../types/post'
 import type { Device } from '../types/device'
+import type { TimelineEntry } from '../types/timeline'
 import { LoginForm } from './LoginForm'
 import { ItemList } from './ItemList'
 import { ItemForm } from './ItemForm'
@@ -28,10 +32,13 @@ import { PostForm } from './PostForm'
 import { PinnedRepoList } from './PinnedRepoList'
 import { DeviceList } from './DeviceList'
 import { DeviceForm } from './DeviceForm'
+import { TimelineEntryList } from './TimelineEntryList'
+import { TimelineEntryForm } from './TimelineEntryForm'
 
-type Tab = 'items' | 'posts' | 'projects' | 'hardware'
+type Tab = 'items' | 'posts' | 'projects' | 'hardware' | 'timeline'
 
 export function AdminPage() {
+  useDocumentTitle('thrax-site — Admin')
   const { session, loading: sessionLoading } = useSession()
   const { items, loading: itemsLoading, error, refetch } = useItems()
   const { tags, refetch: refetchTags } = useTags()
@@ -39,6 +46,7 @@ export function AdminPage() {
   const { posts, loading: postsLoading, error: postsError, refetch: refetchPosts } = usePosts()
   const { pinnedRepoIds, error: pinnedReposError, refetch: refetchPinnedRepos } = usePinnedRepos()
   const { devices, loading: devicesLoading, error: devicesError, refetch: refetchDevices } = useDevices()
+  const { entries, loading: entriesLoading, error: entriesError, refetch: refetchEntries } = useTimelineEntries()
   const [activeTab, setActiveTab] = useState<Tab>('items')
   const [editingItem, setEditingItem] = useState<TechItem | null>(null)
   const [showForm, setShowForm] = useState(false)
@@ -46,6 +54,8 @@ export function AdminPage() {
   const [showPostForm, setShowPostForm] = useState(false)
   const [editingDevice, setEditingDevice] = useState<Device | null>(null)
   const [showDeviceForm, setShowDeviceForm] = useState(false)
+  const [editingEntry, setEditingEntry] = useState<TimelineEntry | null>(null)
+  const [showEntryForm, setShowEntryForm] = useState(false)
 
   if (sessionLoading) return <p className="p-6 font-mono text-sm text-muted">Loading…</p>
   if (!session) {
@@ -153,6 +163,28 @@ export function AdminPage() {
     refetchDevices()
   }
 
+  async function handleSubmitEntry(entry: TimelineEntry) {
+    if (editingEntry) await updateTimelineEntry(entry)
+    else await createTimelineEntry({ ...entry, position: entries.length })
+    setShowEntryForm(false)
+    setEditingEntry(null)
+    refetchEntries()
+  }
+
+  async function handleDeleteEntry(entry: TimelineEntry) {
+    if (!window.confirm(`Delete "${entry.role} @ ${entry.org}"?`)) return
+    await deleteTimelineEntry(entry.id)
+    refetchEntries()
+  }
+
+  async function handleReorderEntries(orderedIds: string[]) {
+    try {
+      await reorderTimelineEntries(orderedIds)
+    } finally {
+      refetchEntries()
+    }
+  }
+
   const formProps = {
     groups: filterGroups,
     allTags: tags,
@@ -208,6 +240,15 @@ export function AdminPage() {
           }`}
         >
           Hardware
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('timeline')}
+          className={`px-3 py-1.5 text-sm ${
+            activeTab === 'timeline' ? 'border-b-2 border-accent text-accent' : 'text-muted hover:text-accent-2'
+          }`}
+        >
+          Timeline
         </button>
       </div>
 
@@ -320,7 +361,7 @@ export function AdminPage() {
             onDelete={handleDeletePinnedRepo}
           />
         </>
-      ) : (
+      ) : activeTab === 'hardware' ? (
         <>
           {devicesError && <p className="text-sm text-red-400">{devicesError}</p>}
 
@@ -366,6 +407,56 @@ export function AdminPage() {
                 setShowDeviceForm(true)
               }}
               onDelete={handleDeleteDevice}
+            />
+          )}
+        </>
+      ) : (
+        <>
+          {entriesError && <p className="text-sm text-red-400">{entriesError}</p>}
+
+          {showEntryForm && !editingEntry ? (
+            <TimelineEntryForm
+              onSubmit={handleSubmitEntry}
+              onCancel={() => {
+                setShowEntryForm(false)
+                setEditingEntry(null)
+              }}
+            />
+          ) : showEntryForm ? null : (
+            <button
+              type="button"
+              onClick={() => {
+                setEditingEntry(null)
+                setShowEntryForm(true)
+              }}
+              className="self-start rounded border border-accent bg-accent/10 px-3 py-1 text-sm font-medium text-accent"
+            >
+              Add timeline entry
+            </button>
+          )}
+
+          {entriesLoading ? (
+            <p className="text-sm text-muted">Loading timeline entries…</p>
+          ) : (
+            <TimelineEntryList
+              entries={entries}
+              editingEntryId={showEntryForm && editingEntry ? editingEntry.id : null}
+              editForm={
+                <TimelineEntryForm
+                  initialEntry={editingEntry ?? undefined}
+                  onSubmit={handleSubmitEntry}
+                  onCancel={() => {
+                    setShowEntryForm(false)
+                    setEditingEntry(null)
+                  }}
+                />
+              }
+              onEdit={(entry) => {
+                setEditingEntry(entry)
+                setShowEntryForm(true)
+              }}
+              onDelete={handleDeleteEntry}
+              onReorder={handleReorderEntries}
             />
           )}
         </>
