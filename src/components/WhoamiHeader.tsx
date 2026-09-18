@@ -1,35 +1,28 @@
 import { useTypewriter } from '../hooks/useTypewriter'
+import { TerminalWindow } from './TerminalWindow'
 
-// Same bordered "terminal window" treatment as FetchHeader, but showing
-// site/owner info instead of filter state — kept separate since FetchHeader
-// stays specific to the software-stack page's filter flags.
+// Same terminal-window content as every other page's header (see
+// TerminalWindow.tsx for the shared chrome), but showing static site/owner
+// info instead of filter state or fetched data — kept as its own component
+// since it has no props/dynamic data, unlike FetchHeader.
 export function WhoamiHeader() {
   const displayedShell = useTypewriter('whoami')
 
   return (
-    <div className="overflow-hidden rounded-md border border-border bg-surface font-mono text-sm">
-      <div className="flex items-center gap-1.5 border-b border-border px-3 py-2">
-        <span className="size-2.5 rounded-full bg-border" />
-        <span className="size-2.5 rounded-full bg-border" />
-        <span className="size-2.5 rounded-full bg-border" />
-      </div>
-      <div className="flex flex-col gap-1 px-4 py-3">
-        <p className="text-accent">visitor@thrax-site</p>
-        <p className="text-muted">-------------------</p>
-        <p>
-          <span className="text-muted">User:</span> tim w. aka thrax
-        </p>
-        <p>
-          <span className="text-muted">Role:</span> bachelor informatics student
-        </p>
-        <p>
-          <span className="text-muted">Site:</span> software stack, CV, projects, blog
-        </p>
-        <p>
-          <span className="text-muted">Shell:</span> {displayedShell}
-          <span className="terminal-cursor text-accent">|</span>
-        </p>
-      </div>
-    </div>
+    <TerminalWindow>
+      <p>
+        <span className="text-muted">User:</span> tim w. aka thrax
+      </p>
+      <p>
+        <span className="text-muted">Role:</span> bachelor informatics student
+      </p>
+      <p>
+        <span className="text-muted">Site:</span> software stack, CV, projects, blog
+      </p>
+      <p>
+        <span className="text-muted">Shell:</span> {displayedShell}
+        <span className="terminal-cursor text-accent">|</span>
+      </p>
+    </TerminalWindow>
   )
 }

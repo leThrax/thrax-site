@@ -4,6 +4,7 @@ import { useGithubRepos } from '../hooks/useGithubRepos'
 import { usePinnedRepos } from '../hooks/usePinnedRepos'
 import { fetchGithubRepo } from '../lib/github'
 import { ProjectCard } from '../components/ProjectCard'
+import { ProjectsHeader } from '../components/ProjectsHeader'
 import { sectionVariants } from '../lib/motionVariants'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import type { GithubRepo } from '../types/github'
@@ -59,32 +60,38 @@ export function ProjectsPage() {
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 
   return (
-    <motion.div variants={sectionVariants} className="flex flex-col gap-4">
-      <h1 className="font-mono text-xs font-semibold tracking-wide text-muted uppercase">
-        <span className="text-accent">❯</span> Projects
-      </h1>
-      {loading ? (
-        <p className="font-mono text-sm text-muted">
-          $ loading repos<span className="terminal-cursor text-accent">_</span>
-        </p>
-      ) : (
-        <>
-          {ownedError && (
-            <p className="font-mono text-sm text-red-400">Couldn't load your GitHub repos: {ownedError}</p>
-          )}
-          {repos.length === 0 ? (
-            <p className="font-mono text-sm text-muted">
-              <span className="text-accent">❯</span> no public repos found
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {repos.map((repo) => (
-                <ProjectCard key={repo.id} repo={repo} />
-              ))}
-            </div>
-          )}
-        </>
-      )}
-    </motion.div>
+    <>
+      <motion.div variants={sectionVariants}>
+        <ProjectsHeader repoCount={repos.length} />
+      </motion.div>
+
+      <motion.div variants={sectionVariants} className="flex flex-col gap-4">
+        <h1 className="font-mono text-xs font-semibold tracking-wide text-muted uppercase">
+          <span className="text-accent">❯</span> Projects
+        </h1>
+        {loading ? (
+          <p className="font-mono text-sm text-muted">
+            $ loading repos<span className="terminal-cursor text-accent">_</span>
+          </p>
+        ) : (
+          <>
+            {ownedError && (
+              <p className="font-mono text-sm text-red-400">Couldn't load your GitHub repos: {ownedError}</p>
+            )}
+            {repos.length === 0 ? (
+              <p className="font-mono text-sm text-muted">
+                <span className="text-accent">❯</span> no public repos found
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {repos.map((repo) => (
+                  <ProjectCard key={repo.id} repo={repo} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </motion.div>
+    </>
   )
 }

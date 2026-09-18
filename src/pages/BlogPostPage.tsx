@@ -9,6 +9,7 @@ import { fetchPostBySlug } from '../lib/posts'
 import type { Post } from '../types/post'
 import { sectionVariants } from '../lib/motionVariants'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { BlogPostHeader } from '../components/BlogPostHeader'
 
 export function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -61,6 +62,7 @@ export function BlogPostPage() {
 
   return (
     <motion.article variants={sectionVariants} className="flex flex-col gap-4">
+      <BlogPostHeader post={post} />
       <Link to="/blog" className="font-mono text-sm text-accent hover:underline">
         ← back to blog
       </Link>

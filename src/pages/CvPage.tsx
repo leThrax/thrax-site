@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { cv } from '../data/cv'
 import { sectionVariants } from '../lib/motionVariants'
 import { TimelinePath } from '../components/TimelinePath'
+import { CvHeader } from '../components/CvHeader'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 function SectionHeading({ label }: { label: string }) {
@@ -17,6 +18,10 @@ export function CvPage() {
 
   return (
     <>
+      <motion.div variants={sectionVariants}>
+        <CvHeader />
+      </motion.div>
+
       <motion.div variants={sectionVariants} className="flex flex-col gap-1">
         <h1 className="font-mono text-2xl font-medium text-fg">{cv.name}</h1>
         <p className="font-mono text-sm text-accent">{cv.title}</p>
