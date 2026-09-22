@@ -240,6 +240,89 @@
   color: var(--garnet);
 }
 
+/* Compact mobile tier — below this, the single-column stacked layout (see
+   the min-width: 720px two-column switch above) means every panel piles up
+   vertically, so the desktop-sized padding/gaps/font-sizes above add up to
+   a lot of scrolling on a phone. This tightens spacing and text size
+   without shrinking any tap target below the 44px minimum already set in
+   Stepper.module.css. */
+@media (max-width: 599px) {
+  .appHeader {
+    padding: 1rem 1rem 0.4rem;
+  }
+
+  .appHeader h1 {
+    font-size: clamp(1.2rem, 5.5vw, 1.5rem);
+  }
+
+  .tagline {
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+  }
+
+  .appMain {
+    gap: 0.6rem;
+    padding: 0.4rem 0.75rem 1rem;
+  }
+
+  .column {
+    gap: 0.6rem;
+  }
+
+  .panel {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .panel h2 {
+    margin-bottom: 0.35rem;
+    font-size: 0.85rem;
+  }
+
+  .hint {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .fieldRow + .fieldRow {
+    margin-top: 0.5rem;
+  }
+
+  .fieldLabel {
+    font-size: 0.85rem;
+  }
+
+  .oddsCaption {
+    font-size: 0.8rem;
+  }
+
+  .oddsHero {
+    margin-top: 0.1rem;
+    font-size: clamp(2.1rem, 13vw, 2.75rem);
+  }
+
+  .oddsSub {
+    font-size: 0.8rem;
+  }
+
+  .callout {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .calloutHeading {
+    font-size: 0.85rem;
+  }
+
+  .calloutValue {
+    font-size: 0.95rem;
+  }
+
+  .calloutSub,
+  .calloutMatchText {
+    font-size: 0.78rem;
+  }
+}
+
 /* Ported from index.css's global reset — rescoped under .app so the
    roll-in/pop keyframe animations above still respect the OS preference,
    consistent with how the rest of the site handles prefers-reduced-motion

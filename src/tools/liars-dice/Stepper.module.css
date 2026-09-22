@@ -46,3 +46,17 @@
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
+
+/* Tighten the gap around the buttons on phones — the 44px buttons
+   themselves stay full size (WCAG minimum tap target), only the spacing
+   between them and the value shrinks. */
+@media (max-width: 599px) {
+  .stepper {
+    gap: 0.5rem;
+  }
+
+  .stepperValue {
+    min-width: 1.75ch;
+    font-size: 1.1rem;
+  }
+}
