@@ -38,4 +38,10 @@ export const NAV_LINKS: NavLink[] = [
     flag: 'blog',
     description: 'Tutorials and software reviews.',
   },
+  {
+    path: '/tools',
+    label: 'Tools',
+    flag: 'tools',
+    description: "Small browser-based utilities — starting with a Liar's Dice odds calculator.",
+  },
 ]

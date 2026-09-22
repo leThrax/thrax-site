@@ -1,0 +1,9 @@
+.dieFace {
+  fill: var(--panel-hero);
+  stroke: var(--brass);
+  stroke-width: 2;
+}
+
+.diePip {
+  fill: var(--ink);
+}

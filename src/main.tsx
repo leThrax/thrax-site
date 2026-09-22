@@ -9,6 +9,8 @@ import { CvPage } from './pages/CvPage.tsx'
 import { ProjectsPage } from './pages/ProjectsPage.tsx'
 import { BlogIndexPage } from './pages/BlogIndexPage.tsx'
 import { BlogPostPage } from './pages/BlogPostPage.tsx'
+import { ToolsIndexPage } from './pages/ToolsIndexPage.tsx'
+import { ToolPage } from './pages/ToolPage.tsx'
 import { NotFoundPage } from './pages/NotFoundPage.tsx'
 import { AdminPage } from './admin/AdminPage.tsx'
 import { HardwarePageFallback } from './components/hardware/HardwarePageFallback.tsx'
@@ -25,6 +27,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/blog" element={<BlogIndexPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/tools" element={<ToolsIndexPage />} />
+          <Route path="/tools/:slug" element={<ToolPage />} />
           <Route
             path="/hardware"
             element={
