@@ -5,7 +5,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
-    'VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY are not set — item data will fail to load. See .env.local.example2.example.',
+    'VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY are not set — item data will fail to load. See .env.local.example.',
   )
 }
 
